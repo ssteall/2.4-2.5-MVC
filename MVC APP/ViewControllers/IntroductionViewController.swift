@@ -8,8 +8,6 @@
 import UIKit
 
 class IntroductionViewController: UIViewController {
-    
-    let questions = Question.getQuestions()
 
     @IBAction func unwind(segue: UIStoryboardSegue) {
         
