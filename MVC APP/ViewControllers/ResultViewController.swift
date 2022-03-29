@@ -17,57 +17,29 @@ class ResultViewController: UIViewController {
     @IBOutlet var descriptionLabel: UILabel!
     
     var results: [Answer]!
- 
-    private var leader: Animal!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.hidesBackButton = true
         
         calculateResult(for: results)
-        printResult()
     }
 
     private func calculateResult(for answers: [Answer]) {
-        var numberOfCatAnswers = 0
-        var numberOfDogAnswers = 0
-        var numberOfTurtleAnswers = 0
-        var numberOfRabbitAnswers = 0
-        var leaderAnswersCount = 0
+        var animalAnswersCount: [Animal : Int] = [:]
         
         for answer in answers {
-            switch answer.animal {
-            case .cat:
-                numberOfCatAnswers += 1
-                if numberOfCatAnswers > leaderAnswersCount {
-                    leaderAnswersCount = numberOfCatAnswers
-                    leader = .cat
-                }
-            case .dog:
-                numberOfDogAnswers += 1
-                if numberOfDogAnswers > leaderAnswersCount {
-                    leaderAnswersCount = numberOfDogAnswers
-                    leader = .dog
-                }
-            case .turtle:
-                numberOfTurtleAnswers += 1
-                if numberOfTurtleAnswers > leaderAnswersCount {
-                    leaderAnswersCount = numberOfTurtleAnswers
-                    leader = .turtle
-                }
-            case .rabbit:
-                numberOfRabbitAnswers += 1
-                if numberOfRabbitAnswers > leaderAnswersCount {
-                    leaderAnswersCount = numberOfRabbitAnswers
-                    leader = .rabbit
-                }
+            animalAnswersCount[answer.animal] = animalAnswersCount[answer.animal] ?? 0 + 1
             }
-        }
+        
+        let sortedAnimalAnswersCount = animalAnswersCount.sorted {$0.value > $1.value}
+        guard let leader = sortedAnimalAnswersCount.first?.key else { return }
+        printResult(with: leader)
     }
 
-    private func printResult() {
-        animalLabel.text = "Вы - \(leader.rawValue)"
-        descriptionLabel.text = leader.definition
+    private func printResult(with animal: Animal) {
+        animalLabel.text = "Вы - \(animal.rawValue)"
+        descriptionLabel.text = animal.definition
     }
 
 }
